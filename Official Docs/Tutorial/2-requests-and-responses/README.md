@@ -1,4 +1,4 @@
-[Doc Link](https://www.django-rest-framework.org/tutorial/1-serialization/)
+[Doc Link](https://www.django-rest-framework.org/tutorial/2-requests-and-responses/)
 
 
 * SuperUser Details -
