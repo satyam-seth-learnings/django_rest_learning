@@ -2,9 +2,10 @@ from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 # Generate token manually
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/creating_tokens_manually.html#creating-tokens-manually
@@ -40,3 +41,12 @@ class UserLoginView(APIView):
                 return Response({'msg':'Login Success'}, status=status.HTTP_200_OK)
             return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProfileView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        serailizer = UserProfileSerializer(request.user)
+        return Response(serailizer.data, status=status.HTTP_200_OK)
+        
