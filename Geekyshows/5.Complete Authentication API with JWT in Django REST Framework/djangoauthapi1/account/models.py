@@ -2,28 +2,26 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 
-# https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#a-full-example
-
-# Custom User Manager
+#  Custom User Manager
 class UserManager(BaseUserManager):
     def create_user(self, email, name, tc, password=None, password2=None):
         """
         Creates and saves a User with the given email, name, tc and password.
         """
         if not email:
-            raise ValueError("Users must have an email address")
+            raise ValueError("User must have an email address")
 
         user = self.model(
             email=self.normalize_email(email),
             name=name,
-            tc=tc,            
+            tc=tc,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email,  name, tc, password=None):
+    def create_superuser(self, email, name, tc, password=None):
         """
         Creates and saves a superuser with the given email, name, tc and password.
         """
@@ -31,13 +29,14 @@ class UserManager(BaseUserManager):
             email,
             password=password,
             name=name,
-            tc=tc
+            tc=tc,
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
-# Custom User Model
+
+#  Custom User Model
 class User(AbstractBaseUser):
     email = models.EmailField(
         verbose_name="Email",
@@ -60,17 +59,17 @@ class User(AbstractBaseUser):
         return self.email
 
     def has_perm(self, perm, obj=None):
-        """Does the user have a specific permission?"""
+        "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
         return self.is_admin
 
     def has_module_perms(self, app_label):
-        """Does the user have permissions to view the app `app_label`?"""
+        "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
 
     @property
     def is_staff(self):
-        """Is the user a member of staff?"""
+        "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
