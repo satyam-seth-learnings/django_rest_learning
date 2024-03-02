@@ -160,6 +160,8 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 }
 
+PASSWORD_RESET_TIMEOUT=900          # 900 Sec = 15 Min
+
 # CORS Headers Config
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
